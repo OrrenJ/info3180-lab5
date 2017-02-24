@@ -55,6 +55,14 @@ def login():
 def secure_page():
     return render_template('secure-page.html')
 
+@app.route("/logout")
+@login_required
+def logout():
+    # Logout the user and end the session
+    logout_user()
+    flash('You have logged out.', 'danger')
+    return redirect(url_for('home'))
+
 # Flash errors from the form if validation fails
 def flash_errors(form):
     for field, errors in form.errors.items():
