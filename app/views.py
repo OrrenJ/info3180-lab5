@@ -45,10 +45,25 @@ def login():
             next = request.args.get('next')
             return redirect(url_for('secure_page')) 
         else:
-            flash('Incorrect username or password.', 'failure')
+            flash('Incorrect username or password.', 'danger')
 
     flash_errors(form)
     return render_template('login.html', form=form)
+
+@app.route("/secure-page")
+@login_required
+def secure_page():
+    return render_template('secure-page.html')
+
+# Flash errors from the form if validation fails
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" % (
+                getattr(form, field).label.text,
+                error
+            ), 'danger')
+
 
 # user_loader callback. This callback is used to reload the user object from
 # the user ID stored in the session
